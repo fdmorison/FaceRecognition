@@ -1,0 +1,4 @@
+segue em anexo o documento com o roteiro para a semana 3. Nessa semana os senhores(as) tem duas atividades principais:
+
+1- Pesquisar/Desenvolver os códigos relacionados ao tema. Se concentre na implementação.
+2- Envio um zip (exercices.zip) com os arquivos relacionados a Seção 3, que contem a parte 1 das tarefas do módulo de RP. Essas tarefas são descritivas e serão usadas para computarmos as notas do módulo de RP.
