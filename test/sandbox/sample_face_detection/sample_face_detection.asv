@@ -1,0 +1,11 @@
+faceDetector = vision.CascadeObjectDetector('ProfileFace');
+faceDetector = vision.CascadeObjectDetector('FrontalFaceCART');
+
+I = imread('fotos/foto2.jpg');
+bboxes = step(faceDetector, I);
+
+IFaces = insertObjectAnnotation(I, 'rectangle', bboxes, 'Face');
+
+figure, 
+imshow(IFaces), 
+title('Detected faces');
