@@ -13,3 +13,9 @@ hs_err_pid*
 
 # Temp files
 ~$*
+*.tmp
+*.wbk
+*.asv
+
+# videos 
+*.avi
