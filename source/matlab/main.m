@@ -11,12 +11,12 @@ player   = vision.VideoPlayer('Position',settings);
 faceDetector = vision.CascadeObjectDetector(...
      'ClassificationModel','FrontalFaceCART'... % 'FrontalFaceCART', 'FrontalFaceLBP'
     ,'MinSize'            ,[75  75]...
-    ,'MaxSize'            ,[250 250]...    %,'ScaleFactor'        ,2 
+    ,'MaxSize'            ,[250 250]...
 );
 
 % Auxilary settings
 detectionTimeout = 0;  % Timeout in frames before firing a new detection
-detectionDelay   = 1; % Maximum Limit for detectionTimeout (set 1 to detect all frames)
+detectionDelay   = 1;  % Maximum Limit for detectionTimeout (set 1 to detect all frames)
 history          = []; % History of faces detected in each of the previous N frames
 historyCount     = []; % Number of faces detected in each of previous N frames
 historySize      = 30; % Maximum history size 
@@ -38,17 +38,21 @@ while ~isDone(reader)
                 historyCount = historyCount(1:historySize);    % truncate          
                 history      = history(1:sum(historyCount),:); % truncate
             end
-            % For each box,
-            % replace it by the average of previous boxes
-            boxes = getMovingAverages(boxes,history,historySize,boxMaxDistance);
+            % Recognize the faces
+            for i=1:N 
+                % Next face
+                box  = boxes(i,:);
+                face = imcrop(image,box);
+                box  = getMovingAverage(box,history,historySize,boxMaxDistance);
+                % TODO Recognize the face
+                name = 'Joaozinho';
+                % Draw the box around the face and write its name
+                image = insertObjectAnnotation(image, 'rectangle', box, name);    
+            end            
         end
     end
     detectionTimeout = mod(detectionTimeout+1,detectionDelay);
-	% Recognize People in the image
-	name = 'Joaozinho';
-	
-    % Annotate and Display the frame
-    image = insertObjectAnnotation(image, 'rectangle', boxes, name);    
+    % Display the frame
     step(player, image);
     % get the next frame
     image = step(reader);
