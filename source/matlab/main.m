@@ -8,14 +8,18 @@ settings = [100 100 [size(image, 2), size(image, 1)]+30];
 player   = vision.VideoPlayer('Position',settings);
 
 % Create a detector object using the Viola-Jones algorithm
-faceDetector = vision.CascadeObjectDetector('FrontalFaceLBP'); % 'FrontalFaceCART', 'FrontalFaceLBP'
+faceDetector = vision.CascadeObjectDetector(...
+     'ClassificationModel','FrontalFaceCART'... % 'FrontalFaceCART', 'FrontalFaceLBP'
+    ,'MinSize'            ,[75  75]...
+    ,'MaxSize'            ,[250 250]...    %,'ScaleFactor'        ,2 
+);
 
 % Auxilary settings
 detectionTimeout = 0;  % Timeout in frames before firing a new detection
-detectionDelay   = 1;  % Maximum Limit for detectionTimeout (set 1 to detect all frames)
+detectionDelay   = 1; % Maximum Limit for detectionTimeout (set 1 to detect all frames)
 history          = []; % History of faces detected in each of the previous N frames
 historyCount     = []; % Number of faces detected in each of previous N frames
-historySize      = 40; % Maximum history size 
+historySize      = 30; % Maximum history size 
 boxMaxDistance   = 15; % Maximum euclidean distance used to identify boxes of same face through frames
 
 % Run the video
