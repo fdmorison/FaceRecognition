@@ -15,43 +15,40 @@ faceDetector = vision.CascadeObjectDetector(...
 );
 
 % Auxilary settings
-detectionTimeout = 0;  % Timeout in frames before firing a new detection
-detectionDelay   = 1;  % Maximum Limit for detectionTimeout (set 1 to detect all frames)
-history          = []; % History of faces detected in each of the previous N frames
-historyCount     = []; % Number of faces detected in each of previous N frames
-historySize      = 30; % Maximum history size 
-boxMaxDistance   = 15; % Maximum euclidean distance used to identify boxes of same face through frames
+history        = []; % History of faces detected in each of the previous N frames
+historyCount   = []; % Number of faces detected in each of previous N frames
+historySize    = 30; % Maximum history size 
+boxMaxDistance = 15; % Maximum euclidean distance used to identify boxes of same face through frames
 
 % Run the video
 while ~isDone(reader)
-    % Detection Step
-    if (detectionTimeout == 0)
-        % Try detect faces
-        boxes = step(faceDetector, image);
-        N     = size(boxes,1);
-        % If some face is detect...
-        if (N > 0)          
-            % Store the boxes of the last N detections
-            history      = [boxes; history];
-            historyCount = [N      historyCount];
-            if ( numel(historyCount) > historySize )
-                historyCount = historyCount(1:historySize);    % truncate          
-                history      = history(1:sum(historyCount),:); % truncate
-            end
-            % Recognize the faces
-            for i=1:N 
-                % Next face
-                box  = boxes(i,:);
-                face = imcrop(image,box);
-                box  = getMovingAverage(box,history,historySize,boxMaxDistance);
-                % TODO Recognize the face
-                name = 'Joaozinho';
-                % Draw the box around the face and write its name
-                image = insertObjectAnnotation(image, 'rectangle', box, name);    
-            end            
+
+    % Try detect faces
+    boxes = step(faceDetector, image);
+    N     = size(boxes,1);
+    
+    % If some face is detect...
+    if (N > 0)          
+        % Store the boxes of the last N detections
+        history      = [boxes; history];
+        historyCount = [N      historyCount];
+        if ( numel(historyCount) > historySize )
+            historyCount = historyCount(1:historySize);    % truncate          
+            history      = history(1:sum(historyCount),:); % truncate
         end
+        % Recognize the faces
+        for i=1:N 
+            % Next face
+            box  = boxes(i,:);
+            face = imcrop(image,box);
+            box  = getMovingAverage(box,history,historySize,boxMaxDistance);
+            % TODO Recognize the face
+            name = 'Joaozinho';
+            % Draw the box around the face and write its name
+            image = insertObjectAnnotation(image, 'rectangle', box, name);    
+        end            
     end
-    detectionTimeout = mod(detectionTimeout+1,detectionDelay);
+    
     % Display the frame
     step(player, image);
     % get the next frame
