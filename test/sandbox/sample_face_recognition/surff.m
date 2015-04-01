@@ -26,9 +26,9 @@ for i = 1:N
     image = insertObjectAnnotation(image, 'rectangle', boxes, 'Fulano');
     % Plot
     figure
-    imshow(coeff);
+    imshow(face);
     hold on;
-    %plot(points.selectStrongest(10));
+    plot(points.selectStrongest(10));
 end
 
 % Show the result
