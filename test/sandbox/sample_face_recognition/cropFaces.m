@@ -5,24 +5,30 @@ detector = vision.CascadeObjectDetector(...
     ,'MaxSize'            ,[300 300]...    
 );
 
-path  = '../../../resources/fotos/';
-files = dir(strcat(path,'*.jpg'));
-count = 1;
+path    = '../../../resources/fotos/';
+entries = dir(path);
+count   = 1;
+dim     = 250;
 
-for i=1:numel(files)
-    % Detect faces
-    filename = strcat(path,files(i).name);
-    image    = double(imread(filename))/256;
-    boxes    = step(detector, image);
-    N        = size(boxes,1);
-    % Crop faces
-    for j = 1:N   
-        box   = boxes(j,:);
-        face  = imcrop(image, box);
-        face  = imresize(face, [100 100]);
-        fname = strcat('face',num2str(count),'.jpg');
-        imwrite(face,fname);
-        count = count + 1;
-    end 
+for i=1:numel(entries)
+    directory = entries(i);
+    if (directory.isdir && strcmp(directory.name,'.')==0 && strcmp(directory.name,'..')==0)
+        person = directory.name;
+        photos = dir(strcat(path,person,'/*.jpg'));
+        count  = 1;
+        for j = 1:numel(photos)
+            photo    = photos(j);
+            filepath = strcat(path,person,'/',photo.name);
+            content  = im2double(imread(filepath));
+            boxes    = step(detector, content);
+            for z=1:size(boxes,1);
+                box   = boxes(z,:);
+                face  = imcrop(content, box);
+                face  = imresize(face, [dim dim]);
+                fname = strcat(person,num2str(count),'.jpg');
+                imwrite(face,fname);
+                count = count + 1;
+            end
+        end
+    end
 end
-

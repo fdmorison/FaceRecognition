@@ -20,4 +20,3 @@ function [result,dist] = getSimilarFaces(query,neighbors,maxDistance)
     end
 
 end
-

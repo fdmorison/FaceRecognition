@@ -9,7 +9,7 @@ function image = preprocessImage( name, content )
     % Calc surf features
     surfPoints   = detectSURFFeatures(grayContent);
     surfFeatures = extractFeatures(grayContent,surfPoints);
-
+    
     % Format result
     image = struct(...
          'name'         , name...

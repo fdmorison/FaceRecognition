@@ -1,5 +1,5 @@
 % Read Input Image
-filename = '../../../resources/fotos/fabricio2.jpg';
+filename = '../../../resources/fotos/fabricio/fabricio2.jpg';
 image    = double(imread(filename))/256;
 
 % Create a detector object using the Viola-Jones algorithm
@@ -21,14 +21,14 @@ for i = 1:N
     % Detect SURF features and return SURFPoints object
     gray   = rgb2gray(face);
     points = detectSURFFeatures(gray);
-    coeff  = pca(gray);
+    [features,points] = extractFeatures(gray,points);
     % Identify person in the original image
     image = insertObjectAnnotation(image, 'rectangle', boxes, 'Fulano');
     % Plot
     figure
     imshow(face);
     hold on;
-    plot(points.selectStrongest(10));
+    plot(points.selectStrongest(10),'showOrientation',true);
 end
 
 % Show the result

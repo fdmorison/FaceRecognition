@@ -6,7 +6,7 @@ function result = loadImages( directory )
 
     for i=1:length
         path    = strcat(directory,files(i).name);        
-        content = double(imread(path))/256;
+        content = im2double(imread(path));
         name    = strrep(files(i).name,'.jpg',' ');
         image   = preprocessImage(name,content);
         result  = [result image];
